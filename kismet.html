@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蔡雨佳 · 百度百科风格页（含照片与视频）</title>
+    <style>
+        /* 百科整体风格：白底黑字，清晰分栏，信息卡片 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: #f3f5f7;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .wiki-wrapper {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-radius: 4px;
+            padding: 30px 30px 20px 30px;
+        }
+
+        /* 头部导航示意 (极简) */
+        .top-bar {
+            font-size: 13px;
+            color: #666;
+            border-bottom: 1px solid #e5e5e5;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .top-bar a {
+            color: #3e6da3;
+            text-decoration: none;
+            margin: 0 6px 0 0;
+        }
+
+        /* 主布局: 左栏内容 + 右侧信息卡片 */
+        .main-content {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .left-column {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* 右侧信息卡片 */
+        .info-card {
+            width: 320px;  /* 稍微加宽以适应视频 */
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 18px 15px 20px 15px;
+            font-size: 14px;
+            color: #222;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            flex-shrink: 0;
+        }
+        .card-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #3e6da3;
+            padding-bottom: 6px;
+            display: inline-block;
+            color: #1e2e4a;
+        }
+        .card-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+            line-height: 1.6;
+        }
+        .card-table td {
+            padding: 8px 5px;
+            border-bottom: 1px solid #eaeaea;
+            vertical-align: top;
+        }
+        .card-table td:first-child {
+            width: 35%;
+            font-weight: 500;
+            color: #555;
+        }
+        .card-table td:last-child {
+            color: #111;
+        }
+
+        /* 图片容器 */
+        .photo-container {
+            width: 100%;
+            margin: 15px 0 8px 0;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+        .photo-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* 视频容器 */
+        .video-container {
+            width: 100%;
+            margin: 12px 0 8px 0;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+            background: #000;  /* 黑色背景适配视频 */
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+        }
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #000;
+        }
+
+        .minor-text {
+            color: #888;
+            font-size: 13px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* 左侧内容样式 */
+        .catalog {
+            background: #f8f9fa;
+            border: 1px solid #dde3e9;
+            padding: 12px 18px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .catalog h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1e2e4a;
+        }
+        .catalog ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px 30px;
+        }
+        .catalog li {
+            color: #3e6da3;
+            cursor: default;
+            border-left: 3px solid #bcc9d9;
+            padding-left: 8px;
+        }
+        .catalog li:hover {
+            color: #c00;
+            border-left-color: #c00;
+        }
+
+        .section {
+            margin: 30px 0 20px;
+        }
+        .section h2 {
+            font-size: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #3e6da3;
+            padding-bottom: 6px;
+            margin-bottom: 16px;
+            color: #1e2e4a;
+        }
+        .section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 0 10px;
+            color: #2a405c;
+        }
+        .section p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+        .ref-note {
+            background: #f2f5f9;
+            padding: 6px 12px;
+            border-left: 4px solid #b31b1b;
+            font-size: 14px;
+            color: #444;
+            margin: 15px 0;
+        }
+        .list-dot {
+            list-style: none;
+            margin: 15px 0;
+        }
+        .list-dot li {
+            padding: 6px 0 6px 22px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3" fill="%233e6da3"/></svg>') left center no-repeat;
+            background-size: 10px;
+            font-size: 15px;
+        }
+        .small-grey {
+            color: #777;
+            font-size: 13px;
+            font-weight: normal;
+            margin-left: 10px;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin: 12px 0;
+            border-bottom: 1px dashed #e0e6ec;
+            padding-bottom: 8px;
+        }
+        .timeline-year {
+            width: 100px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .timeline-desc {
+            flex: 1;
+            color: #3d4f62;
+        }
+
+        .footer-note {
+            border-top: 1px solid #ddd;
+            margin-top: 30px;
+            padding: 15px 0 5px;
+            font-size: 13px;
+            color: #999;
+            text-align: right;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column-reverse;
+            }
+            .info-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wiki-wrapper">
+    <div class="top-bar">
+        <a href="#">百科首页</a> > <a href="#">人物</a> > <a href="#">教育</a> > 蔡雨佳
+        <span style="float:right; color:#aaa;">有<span style="color:#b31b1b;">3</span>个版本</span>
+    </div>
+
+    <div class="main-content">
+        <!-- 左侧文章部分 (内容保持不变) -->
+        <div class="left-column">
+            <div class="catalog">
+                <h3>目录 <span style="font-weight:normal; font-size:13px; margin-left:12px; color:#888;">隐藏</span></h3>
+                <ul>
+                    <li>个人简介</li>
+                    <li>早年经历</li>
+                    <li>教育背景</li>
+                    <li>实践经历</li>
+                    <li>个人生活</li>
+                    <li>主要成就</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>蔡雨佳 <span class="small-grey">汉族 · 大三学生</span></h2>
+                <p><strong>蔡雨佳</strong>，女，四川外国语大学汉语国际教育专业2022级（大三）学生。出生于重庆，主修汉语国际教育，辅修英语语言文化。在校期间积极参与中外文化交流活动，具备扎实的汉语基础与跨文化沟通能力，致力于汉语国际推广与中华文化传播。</p>
+                <div class="ref-note">
+                    📌 引用：“想把汉语的故事讲给世界听”—— 蔡雨佳在2024年国际文化节上的分享。
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>早年经历</h2>
+                <p>蔡雨佳出生于重庆市渝中区，小学及中学阶段就读于重庆巴蜀中学（本部）。自小对话言文字有浓厚兴趣，高中时期担任校刊编辑，并开始接触对外汉语教学相关的志愿活动。2019年曾作为中学生志愿者参与“重庆国际友城交流会”，协助接待外国青少年访华团，由此萌生了成为汉语教师的志向。</p>
+                <p>2022年，以优异成绩考入四川外国语大学中国语言文化学院，选择汉语国际教育专业。入学后即加入学院“汉语桥”志愿者协会。</p>
+            </div>
+
+            <div class="section">
+                <h2>教育背景</h2>
+                <div class="timeline-item">
+                    <div class="timeline-year">2022年9月 — 至今</div>
+                    <div class="timeline-desc"><strong>四川外国语大学</strong> · 汉语国际教育专业 (本科) · 2022级<br>主修课程：现代汉语、古代汉语、语言学概论、第二语言教学法、跨文化交际、中华才艺（书法/剪纸）。<br>GPA: 3.8/4.0 (截至大二下学期)，连续两学年获校级二等奖学金。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2024年7月 — 2024年12月</div>
+                    <div class="timeline-desc"><strong>韩国岭南大学</strong> (交换项目) · 韩国语与韩国文化研修，同时协助该校中文系开展汉语会话辅导。 <span style="color:#b31b1b;">（新）</span></div>
+                </div>
+                <p><strong>语言能力：</strong>汉语（母语，普通话一级乙等）、英语（CET-6， 流利）、韩语（基础日常）。</p>
+            </div>
+
+            <div class="section">
+                <h2>实践经历</h2>
+                <h3>教学与志愿</h3>
+                <div class="timeline-item">
+                    <div class="timeline-year">2023.09 - 2024.01</div>
+                    <div class="timeline-desc"><strong>四川外国语大学留学生部</strong> 汉语辅导志愿者，为初级班留学生提供每周一次的口语陪练，参与组织“国际文化角”。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2024.03 - 2024.06</div>
+                    <div class="timeline-desc"><strong>重庆外国语学校森林小学</strong> 课后兴趣课教师，负责四年级“趣味汉语”拓展课教学。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2024.10 - 2025.01</div>
+                    <div class="timeline-desc"><strong>韩国岭南大学语学院</strong> 实习中文助教，协助主讲老师进行课堂管理及小组会话练习，并获得该校国际交流处推荐信。</div>
+                </div>
+
+                <h3 style="margin-top:22px;">校园与社会活动</h3>
+                <ul class="list-dot">
+                    <li>2023年四川外国语大学“国际文化节” 中国传统文化展台负责人，展示书法与剪纸。</li>
+                    <li>2024年5月 作为学生代表参与“渝见世界”媒体交流周，担任外宾接待及简单翻译。</li>
+                    <li>2024年11月 参加重庆市“汉语国际教育本科生论坛”并宣读论文《网络流行语在对外汉语教学中的辅助作用》。</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>个人生活</h2>
+                <p>蔡雨佳性格温和开朗，爱好书法、篆刻以及传统茶艺。课余时间喜欢拍摄vlog记录留学生活。在同学眼中是个踏实又富有创意的合作者。她也是校民乐社团成员，偶尔参与古筝演出。</p>
+                <p>家庭情况：父母均为中学教师，弟弟蔡雨轩就读初中。因为成长于教师家庭，对教育事业有着天然的亲近感。</p>
+            </div>
+
+            <div class="section">
+                <h2>主要成就</h2>
+                <ul class="list-dot">
+                    <li>2023年 四川外国语大学“优秀志愿者”称号</li>
+                    <li>2023年 全国大学生英语竞赛（NECCS）C类 校级二等奖</li>
+                    <li>2024年 四川外国语大学 二等奖学金、三好学生</li>
+                    <li>2024年 重庆国际文化交流月“优秀青年使者”</li>
+                    <li>2025年 入选四川外国语大学“国际中文教育优秀人才培育计划”</li>
+                </ul>
+                <p style="margin-top:15px;">（截至2025年3月，相关荣誉仍在持续更新。）</p>
+            </div>
+        </div>
+
+        <!-- 右侧信息卡片 —— 包含照片和视频 -->
+        <div class="info-card">
+            <div style="text-align:center;">
+                <span class="card-title">蔡雨佳</span>
+            </div>
+            
+            <!-- 个人照片 -->
+            <div class="photo-container">
+                <img src="C:\Users\Administrator\Desktop\20260119154004_650318.jpg" 
+                     alt="蔡雨佳个人照片"
+                     style="width:100%; display:block;">
+            </div>
+            <div class="minor-text">蔡雨佳 · 个人近照</div>
+
+            <!-- 视频播放器：使用您的本地视频文件，带播放控件 -->
+            <div class="video-container">
+                <video controls playsinline preload="metadata">
+                    <source src="C:\Users\Administrator\Desktop\视频.mp4" type="video/mp4">
+                    您的浏览器不支持 HTML5 视频播放，请升级浏览器或更换设备。
+                </video>
+            </div>
+            <div class="minor-text">📹 个人介绍视频 · 点击播放</div>
+
+            <table class="card-table">
+                <tr><td>本名</td><td>蔡雨佳</td></tr>
+                <tr><td>性别</td><td>女</td></tr>
+                <tr><td>民族</td><td>汉族</td></tr>
+                <tr><td>国籍</td><td>中国</td></tr>
+                <tr><td>出生地</td><td>重庆市渝中区</td></tr>
+                <tr><td>出生日期</td><td>2004年5月18日 <span style="color:#888; font-size:12px;">（20岁）</span></td></tr>
+                <tr><td>星座</td><td>金牛座</td></tr>
+                <tr><td>身高</td><td>165 cm <span style="color:#aaa;">(2024年体测)</span></td></tr>
+                <tr><td>就读院校</td><td>四川外国语大学<br>（2022级 · 大三）</td></tr>
+                <tr><td>院系</td><td>中国语言文化学院<br>汉语国际教育</td></tr>
+                <tr><td>语言</td><td>普通话、英语、基础韩语</td></tr>
+                <tr><td>爱好特长</td><td>书法、篆刻、古筝、摄影</td></tr>
+                <tr><td>相关团体</td><td>川外国教学生会<br>汉语桥志愿者协会</td></tr>
+                <tr><td>社交媒体</td><td>📧 yujia.cai@stu.sisu.edu.cn<br>📱 小红书：@yujia_tcsl</td></tr>
+            </table>
+            <div style="margin-top:15px; font-size:13px; border-top:1px solid #ddd; padding-top:10px; color:#3e6da3;">
+                ⚡ 近期动态：已报名2025年暑期“赴美汉语教学志愿者”项目。
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚注干净无多余文字 -->
+    <div class="footer-note">
+        <!-- 无多余说明文字 -->
+    </div>
+</div>
+</body>
+</html>
